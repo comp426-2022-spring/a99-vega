@@ -61,3 +61,19 @@ And that is about all you need to get started.
 All the rest of the assignment instructions are available at: https://comp426.johndmart.in/a/99
 
 Good skill and be creative!
+
+## Team Vega Repository Instructions
+
+To get things from the upstream repository
+1. git merge upstream/main
+
+To send things to the upstream repository
+1. From command line
+    1. git add .
+    2. git commit -m "stuff"
+    3. git push origin <branch name>
+2. From your own repository's GitHub
+    1. Create a pull reuqest to the upstream
+3. From the upstream repository's GitHub
+    1. Merge the pull request
+
