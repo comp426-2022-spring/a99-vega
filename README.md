@@ -66,7 +66,7 @@ Good skill and be creative!
 
 To get things from the upstream repository
 ```git fetch upstream
-   git merge upstream/<branch>```
+git merge upstream/<branch>```
 
 To send things to the upstream repository
 1. From command line
