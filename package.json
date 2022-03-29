@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/eohana-unc/a99-vega.git"
   },
-  "author": "Elad Ohana, <insert other names>",
+  "author": "Elad Ohana, Andrew Buchanan, <insert other names>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/eohana-unc/a99-vega/issues"
