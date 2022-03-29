@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Peter-H-Jackson/a99-vega.git"
+    "url": "git+https://github.com/comp426-2022-spring/a99-vega"
   },
-  "author": "Vega",
+  "author": "Elad Ohana, Andrew Buchanan, <insert other names>",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/Peter-H-Jackson/a99-vega/issues"
