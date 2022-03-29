@@ -73,7 +73,7 @@ To send things to the upstream repository
     git commit -m "stuff" 
     git push origin <branch name>```
 2. From your own repository's GitHub
-    ```Create a pull reuqest to the upstream```
+    1. Create a pull reuqest to the upstream
 3. From the upstream repository's GitHub
-    ``Merge the pull request```
+    1. Merge the pull request
 
