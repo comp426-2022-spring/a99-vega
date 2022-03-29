@@ -1,0 +1,20 @@
+{
+  "name": "a99-vega",
+  "version": "1.0.0",
+  "description": "Final Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peter-H-Jackson/a99-vega.git"
+  },
+  "author": "Vega",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Peter-H-Jackson/a99-vega/issues"
+  },
+  "homepage": "https://github.com/Peter-H-Jackson/a99-vega#readme"
+}
