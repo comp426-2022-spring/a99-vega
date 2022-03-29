@@ -65,15 +65,15 @@ Good skill and be creative!
 ## Team Vega Repository Instructions
 
 To get things from the upstream repository
-1. git merge upstream/main
+```git merge upstream/<branch>```
 
 To send things to the upstream repository
 1. From command line
-    1. git add .
-    2. git commit -m "stuff"
-    3. git push origin <branch name>
+    ```git add . ```
+    ```git commit -m "stuff" ```
+    ```git push origin <branch name>```
 2. From your own repository's GitHub
-    1. Create a pull reuqest to the upstream
+    ```Create a pull reuqest to the upstream```
 3. From the upstream repository's GitHub
-    1. Merge the pull request
+    ``Merge the pull request```
 
