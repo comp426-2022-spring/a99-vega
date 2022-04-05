@@ -1,0 +1,35 @@
+{
+    "databases": [
+        {
+            "name": "user_content",
+            "tables": [
+                {
+                    "name": "userinfo",
+                    "columns": {
+                        "__pkid": "INTEGER PRIMARY KEY",
+                        "username": "TEXT",
+                        "password": "TEXT",
+                        "email": "TEXT",
+                        "picture": "TEXT",
+                        "status": "TEXT"
+                    }
+                },
+                {
+                    "name": "submission",
+                    "columns": {
+                        "__pkid": "INTEGER PRIMARY KEY",
+                        "userid": "INTEGER",
+                        "date": "TEXT",
+                        "address": "TEXT",
+                        "city": "TEXT",
+                        "state": "TEXT",
+                        "zip": "TEXT",
+                        "latitude": "REAL",
+                        "longitude": "REAL",
+                        "score": "INTEGER"
+                    }
+                }
+            ]
+        }
+    ]
+}
