@@ -1,13 +1,27 @@
 const Database = require("better-sqlite3")
+const fs = require("fs")
 const table = require("better-sqlite3/lib/methods/table")
 
 
-
-function setup(db, tablename, tablecolumns){
+/**
+ * Sets searches a database for the specified table and creates it if not present
+ * 
+ * @param {Databasee} db            The database object in which to search
+ * @param {String}    tablename     The name of the requested table
+ * @param {Object}    tablecolumns  The columns and types to add if the table needs to be created
+ * 
+ *  Columns should have the following format:
+ *    { <column name>: <field type>, ...}
+ *    Example { "__pkid": "INTEGER PRIMARY KEY"}
+ */
+function setupTable(db, tablename, tablecolumns){
+  // search for table with requested name
   const stmt = db.prepare("SELECT name FROM sqlite_schema WHERE type='table' and name=?")
   const table = stmt.get(tablename)
 
+  // if table is not found, set it up:
   if (!table) {
+    // set up a string with the table columns that should look like "field: type,\n..."
     let columns = ""
     let count = 0
     for (let item in tablecolumns) {
@@ -16,46 +30,59 @@ function setup(db, tablename, tablecolumns){
       }
       columns += `${item} ${tablecolumns[item]}`
     }
+
+    // run statement to create table with columns added
     const dbInit = `CREATE TABLE ${tablename} (${columns});`
     db.exec(dbInit)
   }
 }
 
-function testUserinfo(db) {
-  let row = db.prepare("SELECT * FROM userinfo WHERE username = 'test'").get()
-  if (!row) {
-    const stmt = db.prepare("INSERT INTO userinfo (username, password, status) VALUES ('test', 'test', 1)")
-    stmt.run()
-    row = db.prepare("SELECT * FROM userinfo WHERE username = 'test'").get()
+/**
+ * Creates a specific database requested based on configuration file
+ * 
+ * @param {Object} database   The database configuration to set up
+ * @returns the retrieved or created database object 
+ */
+function setupDatabase(database) {
+  // retrieves the database requested
+  const db = new Database(`./databases/${database["name"]}.db`)
+
+  // write each of the tables to the database
+  for (let table of database["tables"]){
+    setupTable(db, table["name"], table["columns"])
   }
-  if (row) {
-    console.log(row)
-  } else {
-    console.log("Test failed")
-  }
-  
+  return db
 }
 
-const db = new Database("./databases/user_content.db")
+/**
+ * Initialize the requested databases based on the provided config file
+ * May create or retrieve multiple databases and place them into array 
+ * 
+ * @param {String} configFile   The path of the file with the setup info
+ * @returns array of created or retrieved databases
+ */
+function initialize(configFile){
+  // get config file and convert to json
+  const f = fs.readFileSync(configFile, {encoding: "utf-8", flags:"r"})
+  const config = JSON.parse(f)
 
-const userinfo = {
-  "id": "INTEGER PRIMARY KEY",
-  "username": "TEXT",
-  "password": "TEXT",
-  "status": "INTEGER"
+  // initialize array
+  const databases = []
+
+  // build databases in array
+  for (let database of config.databases){
+    databases.push(setupDatabase(database))
+  }
+
+  return databases
 }
 
-setup(db, "userinfo", userinfo)
-// testUserinfo(db)
 
-// db.prepare("SELECT name FROM sqlite_schema WHERE type='table' AND name='userinfo'")
-
-// if (!db.get()){
-//   db.prepare("")
-// }
+const databases = initialize("./config/dbconfig.json")
 
 
 // TODO:
+// This is now going to be set up i the dbconfig.json
 // need to create two tables:
   // 1 tables for user info
     // userinfo database should have:
@@ -87,4 +114,4 @@ setup(db, "userinfo", userinfo)
 // QUESTIONS:
   // Should access log be a text file vs a database?
 
-module.exports = db
+module.exports = databases
