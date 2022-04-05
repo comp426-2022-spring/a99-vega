@@ -13,7 +13,12 @@ const writeStream = fs.createWriteStream('./databases/access.log', {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
 
 app.get("/", (req, res) => {
-  let html = fs.readFileSync("./www/template.html", {encoding:"utf-8", flags:'r'}).replace("<!--MAIN BODY PLACEHOLDER-->", "<p>This seems to be working</p>")
+  let html = fs.readFileSync("./www/template.html", {encoding:"utf-8", flags:'r'})
+  // console.log(html)
+  let test = fs.readFileSync("./www/test.html", {encoding:"utf-8", flags:'r'})
+  // console.log(test)
+  html = html.replace("<!--MAIN BODY PLACEHOLDER-->", test)
+  // html.replace("<!--MAIN BODY PLACEHOLDER-->", "<p>This seems to be working</p>")
   res.end(html)
 })
 
