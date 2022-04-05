@@ -80,6 +80,8 @@ function initialize(configFile){
 
 const databases = initialize("./config/dbconfig.json")
 
+// FOR TESTING PURPOSES
+// console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
 
 // TODO:
 // This is now going to be set up i the dbconfig.json
