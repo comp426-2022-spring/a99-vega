@@ -1,8 +1,11 @@
 const Database = require("better-sqlite3")
 const fs = require("fs")
 const table = require("better-sqlite3/lib/methods/table")
+const args = require("minimist")(process.argv)
 
 
+//
+const databasePath = 'data'
 /**
  * Sets searches a database for the specified table and creates it if not present
  * 
@@ -45,7 +48,7 @@ function setupTable(db, tablename, tablecolumns){
  */
 function setupDatabase(database) {
   // retrieves the database requested
-  const db = new Database(`./databases/${database["name"]}.db`)
+  const db = new Database(`./${databasePath}/${database["name"]}.db`)
 
   // write each of the tables to the database
   for (let table of database["tables"]){
@@ -77,12 +80,12 @@ function initialize(configFile){
   return databases
 }
 
-
-const databases = initialize("./config/dbconfig.json")
+  const databases = initialize("./config/dbconfig.json")
 
 // FOR TESTING PURPOSES
-// console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
-
+if (args["test"]){
+  console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
+}
 // TODO:
 // This is now going to be set up i the dbconfig.json
 // need to create two tables:

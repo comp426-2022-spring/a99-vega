@@ -5,11 +5,14 @@ const databases = require('./database.js')
 
 const args = require('minimist')(process.argv)
 
+
+const dataPath = 'data'
 const port = args["port"] || 5000
+
 
 const app = express()
 
-const writeStream = fs.createWriteStream('./databases/access.log', {flags: 'a'})
+const writeStream = fs.createWriteStream(`./${dataPath}/access.log`, {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
 
 /**
