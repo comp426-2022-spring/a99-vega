@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const databases = require('./app/database.js')
 const utilities = require('./app/utilities.js')
-
+const authRouter = require('./app/auth.js')
 
 const loadHTML = utilities.loadHtml
 
@@ -19,15 +19,15 @@ const app = express()
 const writeStream = fs.createWriteStream(`./${dataPath}/access.log`, {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
 
-/**
- * Use the fs library to load a file as utf-8
- * 
- * @param {String} filename the full or relative path of the file
- * @returns the text of the file read
- */
-function loadFileAsText(filename) {
-  return fs.readFileSync(filename, {encoding:"utf-8", flags:'r'})
-}
+// /**
+//  * Use the fs library to load a file as utf-8
+//  * 
+//  * @param {String} filename the full or relative path of the file
+//  * @returns the text of the file read
+//  */
+// function loadFileAsText(filename) {
+//   return fs.readFileSync(filename, {encoding:"utf-8", flags:'r'})
+// }
 
 // /**
 //  * Load the html file from a template and injects body into a placeholder div
@@ -48,15 +48,18 @@ function loadFileAsText(filename) {
 // }
 
 
+
 // Endpoint for the main page - this is a test page right now
 app.get("/", (req, res) => {
   res.status(200).end(loadHTML("template", "test", "placeholder"))
 })
 
-// Endpoint for the login page:
-app.get("/login", (req, res) => {
-  res.status(200).end(loadHTML("template", "loginform", "placeholder"))
-})
+app.use(authRouter)
+
+// // Endpoint for the login page:
+// app.get("/login", (req, res) => {
+//   res.status(200).end(loadHTML("template", "loginform", "placeholder"))
+// })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

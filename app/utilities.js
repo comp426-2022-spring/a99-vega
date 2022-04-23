@@ -1,3 +1,14 @@
+const fs = require('fs')
+/**
+ * Use the fs library to load a file as utf-8
+ * 
+ * @param {String} filename the full or relative path of the file
+ * @returns the text of the file read
+ */
+ function loadFileAsText(filename) {
+  return fs.readFileSync(filename, {encoding:"utf-8", flags:'r'})
+}
+
 /**
  * Load the html file from a template and injects body into a placeholder div
  * Default directory for lookup is "./www"
