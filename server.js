@@ -1,6 +1,10 @@
 const fs = require('fs')
 const express = require('express')
 const morgan = require('morgan')
+var passport = require('passport');
+var session = require('express-session');
+var SQLiteStore = require('connect-sqlite3')(session);
+
 const databases = require('./app/database.js')
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js')
@@ -18,6 +22,16 @@ const app = express()
 
 const writeStream = fs.createWriteStream(`./${dataPath}/access.log`, {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
+
+app.use(express.static('./session'));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  store: new SQLiteStore({ db: 'sessions.db', dir: './data/temp' })
+}));
+
+app.use(passport.authenticate('session'));
 
 // /**
 //  * Use the fs library to load a file as utf-8
