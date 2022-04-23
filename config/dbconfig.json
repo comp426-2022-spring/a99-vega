@@ -8,7 +8,8 @@
                     "columns": {
                         "__pkid": "INTEGER PRIMARY KEY",
                         "username": "TEXT",
-                        "password": "TEXT",
+                        "hashed_password": "BLOB",
+                        "salt": "BLOB",
                         "email": "TEXT",
                         "picture": "TEXT",
                         "status": "TEXT"

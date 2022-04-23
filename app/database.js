@@ -85,6 +85,9 @@ function initialize(configFile){
 // FOR TESTING PURPOSES
 if (args["test"]){
   console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
+  // console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
+  // console.log(databases[0].prepare("INSERT INTO userinfo "))
+  console.log(databases[0].prepare("SELECT * FROM userinfo").all())
 }
 
 module.exports = databases
