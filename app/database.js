@@ -86,37 +86,5 @@ function initialize(configFile){
 if (args["test"]){
   console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
 }
-// TODO:
-// This is now going to be set up i the dbconfig.json
-// need to create two tables:
-  // 1 tables for user info
-    // userinfo database should have:
-    // user id (pk)
-    // username
-    // password (hashed)
-    // email ? (for recovery)
-    // profile picture (probably a filename?)
-    // status
-    // anything else?
-
-  // 1 tables for content (observations)
-    // content db should have:
-    // submission id (pk)
-    // user id (fk - from userinfo database)
-    // longitude 
-    // latitude
-    // address (of the place reviewed - should be split --
-      // street address, city, state, zip) 
-    // (could we get the city/state from the zip code?)
-    // date of observation
-    // compliance score (maybe split this one too)
-      // mask
-      // social distancing
-      // handwashing/sanitizer use 
-      // wiping surfaces 
-      // symptomatic crowds (ie, people out while coughing, sneezing...)
-
-// QUESTIONS:
-  // Should access log be a text file vs a database?
 
 module.exports = databases
