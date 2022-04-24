@@ -2,6 +2,7 @@ const Database = require("better-sqlite3")
 const fs = require("fs")
 const table = require("better-sqlite3/lib/methods/table")
 const args = require("minimist")(process.argv)
+const crypto = require('crypto')
 
 
 //
@@ -85,6 +86,14 @@ function initialize(configFile){
 // FOR TESTING PURPOSES
 if (args["test"]){
   console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
+
+  var salt = crypto.randomBytes(16);
+  databases[0].prepare('INSERT OR IGNORE INTO userinfo (username, hashed_password, salt) VALUES (?, ?, ?)').run(
+    'alice',
+    crypto.pbkdf2Sync('letmein', salt, 310000, 32, 'sha256'),
+    salt
+  );
+
   // console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
   // console.log(databases[0].prepare("INSERT INTO userinfo "))
   console.log(databases[0].prepare("SELECT * FROM userinfo").all())

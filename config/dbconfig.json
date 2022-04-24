@@ -1,7 +1,7 @@
 {
     "databases": [
         {
-            "name": "user_content_test",
+            "name": "user_content_test2",
             "tables": [
                 {
                     "name": "userinfo",
@@ -11,7 +11,7 @@
                         "hashed_password": "BLOB",
                         "salt": "BLOB",
                         "email": "TEXT",
-                        "picture": "TEXT",
+                        "role": "TEXT",
                         "status": "TEXT"
                     }
                 },
