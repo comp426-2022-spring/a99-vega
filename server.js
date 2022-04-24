@@ -40,7 +40,6 @@ app.use(express.urlencoded({ extended: true }));
 const writeStream = fs.createWriteStream(`./${dataPath}/access.log`, {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
 
-
 app.use(express.static('/session'));
 app.use(session({
   secret: 'keyboard cat',
@@ -52,6 +51,7 @@ app.use(session({
 app.use(passport.authenticate('session'));
 
 
+app.use(express.static("./www/css"))
 
 
 // Endpoint for the main page - this is a test page right now
