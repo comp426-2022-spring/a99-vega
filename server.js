@@ -70,8 +70,9 @@ app.get("/session", (req, res) => {
       user = stmt.get(req.session.passport.user.username)
       // console.log(req.session.passport)
       console.log(user)
+      // req.user = user.__pkid
       if (user.role == "member"){
-        res.end(loadHTML("template", "session/submitdata", "placeholder"))
+        res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", user.__pkid.toString()))
       } else if (user.role =="admin"){
         res.end(loadHTML("template", "session/admin", "placeholder"))
       }
@@ -85,8 +86,13 @@ app.get("/session", (req, res) => {
 })
 
 app.post("/submit", (req, res)=>{
+  console.log(req.session)
+  // console.log(req.user)
   console.log(req.body)
-  // stmt = db.prepare("INSERT INTO")
+  vals = req.body
+  stmt = db.prepare("INSERT INTO submission (userid, date, zip, overall_score, mask_score, supplies_score, distancing_score) VALUES (?, ?, ?, ?, ?, ?, ?);")
+  stmt.run(vals.userid, vals.zip, vals.date, vals.overall_score, vals.mask_score, vals.supplies_score, vals.distancing_score)
+  
   res.redirect("/");
 })
 

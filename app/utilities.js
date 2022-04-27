@@ -17,7 +17,7 @@ const fs = require('fs')
  * 
  * @param {String} template the filename of the template html file (do not include .html in name)
  * @param {String} body     the filename of the body html file (do not include .html in name)
- * @param {*} placeholder   the id of the placeholder div used to replace content
+ * @param {String} placeholder   the id of the placeholder div used to replace content
  * @returns 
  */
  function loadContent (template, body, placeholder){
@@ -34,7 +34,7 @@ const fs = require('fs')
  * 
  * @param {String} template the filename of the template html file (do not include .html in name)
  * @param {String} body     the filename of the body html file (do not include .html in name)
- * @param {*} placeholder   the id of the placeholder div used to replace content
+ * @param {String} placeholder   the id of the placeholder div used to replace content
  * @returns 
  */
  function loadHTML (template, body, placeholder, directory){
