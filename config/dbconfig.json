@@ -1,7 +1,7 @@
 {
     "databases": [
         {
-            "name": "user_content_test6",
+            "name": "user_content_test7",
             "tables": [
                 {
                     "name": "userinfo",
@@ -21,13 +21,11 @@
                         "__pkid": "INTEGER PRIMARY KEY",
                         "userid": "INTEGER",
                         "date": "TEXT",
-                        "address": "TEXT",
-                        "city": "TEXT",
-                        "state": "TEXT",
                         "zip": "TEXT",
-                        "latitude": "REAL",
-                        "longitude": "REAL",
-                        "score": "INTEGER"
+                        "overall_score": "INTEGER",
+                        "mask_score": "INTEGER",
+                        "supplies_score": "INTEGER",
+                        "distancing_score": "INTEGER"
                     }
                 }
             ]

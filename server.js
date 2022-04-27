@@ -84,6 +84,11 @@ app.get("/session", (req, res) => {
   }
 })
 
+app.post("/submit", (req, res)=>{
+  console.log(req.body)
+  // stmt = db.prepare("INSERT INTO")
+  res.redirect("/");
+})
 
 // // Endpoint for the login page:
 // app.get("/login", (req, res) => {
