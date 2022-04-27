@@ -12,13 +12,13 @@ const loadHTML = require('./utilities.js').loadHtml
 const router = express.Router()
 
 router.get("/login", (req, res) => {
-  // console.log(req)
+  console.log(req.session)
   let content = loadHTML("template", "loginform", "placeholder")
   if (req.session.messages){
     const messages = req.session.messages
     // console.log(messages)
     content = loadContent(content, `<p class="error">${messages[messages.length - 1]}<p>`, "message")
-    console.log(content)
+    // console.log(content)
     // content = loadContent(content, messages[messages.length - 1], "message")
   }
   res.status(200).end(content)
@@ -70,8 +70,8 @@ router.post('/signup', function(req, res, next) {
   var salt = crypto.randomBytes(16);
   crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', function(err, hashedPassword) {
     if (err) { return next(err); }
-    const stmt = db.prepare('INSERT INTO userinfo (username, hashed_password, salt, role) VALUES (?, ?, ?, ?)')
-    stmt.run(req.body.username, hashedPassword, salt, "member")
+    const stmt = db.prepare('INSERT INTO userinfo (username, hashed_password, salt, role, status) VALUES (?, ?, ?, ?, ?)')
+    stmt.run(req.body.username, hashedPassword, salt, "member", "active")
   });
   res.redirect("/login")
 });

@@ -88,10 +88,10 @@ if (args["test"]){
   console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
 
   var salt = crypto.randomBytes(16);
-  databases[0].prepare('INSERT OR IGNORE INTO userinfo (username, hashed_password, salt) VALUES (?, ?, ?)').run(
+  databases[0].prepare('INSERT OR IGNORE INTO userinfo (username, hashed_password, salt, role, status) VALUES (?, ?, ?, ?, ?)').run(
     'alice',
     crypto.pbkdf2Sync('letmein', salt, 310000, 32, 'sha256'),
-    salt
+    salt, "admin", "active"
   );
 
   // console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())

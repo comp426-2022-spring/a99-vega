@@ -5,7 +5,7 @@ var passport = require('passport');
 var session = require('express-session');
 var SQLiteStore = require('connect-sqlite3')(session);
 
-const databases = require('./app/database.js')
+const db = require('./app/database.js')[0]
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js');
 const req = require('express/lib/request');
@@ -65,17 +65,26 @@ app.use(authRouter)
 app.get("/session", (req, res) => {
   console.log(req.session)
   try {
-  if (req.session.passport.user.username.length > 0){
-    console.log(req.session.passport)
-    res.end(loadHTML("template", "session/submitdata", "placeholder"))
-  } else {
-    console.log(req.session.passport)
-    res.redirect("/login")}
+    if (req.session.passport.user.username.length > 0){
+      stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
+      user = stmt.get(req.session.passport.user.username)
+      // console.log(req.session.passport)
+      console.log(user)
+      if (user.role == "member"){
+        res.end(loadHTML("template", "session/submitdata", "placeholder"))
+      } else if (user.role =="admin"){
+        res.end(loadHTML("template", "session/admin", "placeholder"))
+      }
+    } else {
+      console.log(req.session.passport)
+      res.redirect("/login")}
   } catch (e) {
     // req.session = new Session()
     res.redirect("login")
   }
 })
+
+
 // // Endpoint for the login page:
 // app.get("/login", (req, res) => {
 //   res.status(200).end(loadHTML("template", "loginform", "placeholder"))
