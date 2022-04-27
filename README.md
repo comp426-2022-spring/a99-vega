@@ -79,3 +79,123 @@ To send things to the upstream repository
 3. From the upstream repository's GitHub
     1. Merge the pull request
 
+## API Endpoints
+
+### / GET (test endpoint for the main page)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /session GET (main page with data)
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /submit POST
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /app/login GET
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /app/signup GET
+
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
+
+### /app/login POST
+#### Request cURL
+
+```
+
+```
+
+#### Response body
+
+```
+
+```
+
+#### Response headers
+
+```
+
+```
