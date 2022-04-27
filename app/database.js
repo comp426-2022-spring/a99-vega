@@ -85,15 +85,18 @@ function initialize(configFile){
 
 // FOR TESTING PURPOSES
 if (args["test"]){
+  const testUser = "test_admin"
   console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
+  if(!databases[0].prepare("SELECT * from userinfo WHERE username = ?").get(testUser)){
+    const testPass = "notpassword"
 
-  var salt = crypto.randomBytes(16);
-  databases[0].prepare('INSERT OR IGNORE INTO userinfo (username, hashed_password, salt, role, status) VALUES (?, ?, ?, ?, ?)').run(
-    'alice',
-    crypto.pbkdf2Sync('letmein', salt, 310000, 32, 'sha256'),
-    salt, "admin", "active"
-  );
-
+    var salt = crypto.randomBytes(16);
+    databases[0].prepare('INSERT OR IGNORE INTO userinfo (username, hashed_password, salt, role, status) VALUES (?, ?, ?, ?, ?)').run(
+      testUser,
+      crypto.pbkdf2Sync(testPass, salt, 310000, 32, 'sha256'),
+      salt, "admin", "active"
+    );
+  }
   // console.log(databases[0].prepare("SELECT * FROM sqlite_schema WHERE type = 'table'").all())
   // console.log(databases[0].prepare("INSERT INTO userinfo "))
   console.log(databases[0].prepare("SELECT * FROM userinfo").all())

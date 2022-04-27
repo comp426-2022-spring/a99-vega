@@ -45,4 +45,4 @@ const fs = require('fs')
   // return html.replace(`<div id="${placeholder}"></div>`, content)
 }
 
-module.exports = {loadHtml: loadHTML, loadContent: loadContent}
+module.exports = {loadHtml: loadHTML, loadContent: loadContent, loadFileAsText: loadFileAsText}

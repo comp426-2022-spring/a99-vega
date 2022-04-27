@@ -8,11 +8,12 @@ var SQLiteStore = require('connect-sqlite3')(session);
 const db = require('./app/database.js')[0]
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js');
-const req = require('express/lib/request');
+// const req = require('express/lib/request');
 const { Session } = require('express-session');
 
 const loadHTML = utilities.loadHtml
 const loadContent = utilities.loadContent
+const loadFileAsText = utilities.loadFileAsText
 
 const args = require('minimist')(process.argv)
 
@@ -57,19 +58,46 @@ app.use(express.static("./www/css"))
 
 // Endpoint for the main page - this is a test page right now
 app.get("/", (req, res) => {
-  res.status(200).end(loadHTML("template", "test", "placeholder"))
+  let data = db.prepare("SELECT * FROM submission").all()
+  if (args["test"]) {console.log(data)}
+  let table = `
+  <table>
+    <tr>
+      <th>Zip</th>
+      <th>Date</th>
+      <th>Overall Score</th>
+      <th>Mask Score</th>
+      <th>Supplies Score</th>
+      <th>Distancing Score</th>
+    </tr>
+  `
+
+  for (row of data){
+    table += `
+    <tr>
+      <td>${row.zip}</td>
+      <td>${row.date}</td>
+      <td>${row.overall_score}</td>
+      <td>${row.mask_score}</td>
+      <td>${row.supplies_score}</td>
+      <td>${row.distancing_score}</td>
+    </tr>`
+  }
+  table +=`</table>`
+  // res.status(200).end(loadHTML("template", "test", "placeholder"))
+  res.status(200).end(loadContent(loadFileAsText("www/template.html"), table, "placeholder"))
 })
 
 app.use(authRouter)
 
 app.get("/session", (req, res) => {
-  console.log(req.session)
+  if (args["test"]) {console.log(req.session)}
   try {
     if (req.session.passport.user.username.length > 0){
       stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
       user = stmt.get(req.session.passport.user.username)
       // console.log(req.session.passport)
-      console.log(user)
+      if (args["test"]) {console.log(user)}
       // req.user = user.__pkid
       if (user.role == "member"){
         res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", user.__pkid.toString()))
@@ -77,7 +105,7 @@ app.get("/session", (req, res) => {
         res.end(loadHTML("template", "session/admin", "placeholder"))
       }
     } else {
-      console.log(req.session.passport)
+      if (args["test"]){console.log(req.session.passport)}
       res.redirect("/login")}
   } catch (e) {
     // req.session = new Session()
@@ -86,9 +114,9 @@ app.get("/session", (req, res) => {
 })
 
 app.post("/submit", (req, res)=>{
-  console.log(req.session)
+  if (args["test"]){console.log(req.session)}
   // console.log(req.user)
-  console.log(req.body)
+  if (args["test"]){console.log(req.body)}
   vals = req.body
   stmt = db.prepare("INSERT INTO submission (userid, date, zip, overall_score, mask_score, supplies_score, distancing_score) VALUES (?, ?, ?, ?, ?, ?, ?);")
   stmt.run(vals.userid, vals.zip, vals.date, vals.overall_score, vals.mask_score, vals.supplies_score, vals.distancing_score)

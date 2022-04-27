@@ -5,6 +5,7 @@ var crypto = require('crypto');
 const { append } = require("express/lib/response");
 const { loadContent } = require("./utilities.js");
 const db = require("./database.js")[0];
+const args = require("minimist")(process.argv)
 // var db = require(databases.js)
 
 const loadHTML = require('./utilities.js').loadHtml
@@ -12,7 +13,7 @@ const loadHTML = require('./utilities.js').loadHtml
 const router = express.Router()
 
 router.get("/login", (req, res) => {
-  console.log(req.session)
+  if (args["test"]){console.log(req.session)}
   let content = loadHTML("template", "loginform", "placeholder")
   if (req.session.messages){
     const messages = req.session.messages
@@ -59,7 +60,7 @@ router.post('/login', passport.authenticate('local', {
 }));
 
 router.get('/logout', function(req, res, next) {
-  console.log(req.session.passport)
+  if (args["test"]){console.log(req.session.passport)}
   req.logout();
   res.redirect('/');
 });
