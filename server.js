@@ -63,8 +63,8 @@ app.get("/", (req, res) => {
   let table = `
   <table>
     <tr>
-      <th>Zip</th>
       <th>Date</th>
+      <th>ZIP</th>
       <th>Overall Score</th>
       <th>Mask Score</th>
       <th>Supplies Score</th>

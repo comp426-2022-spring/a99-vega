@@ -6,3 +6,18 @@ h1 {
 .error {
     color: red;
 }
+
+td {
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* border: 1px solid black; */
+}
+
+tr:nth-child(even) {
+    background-color: lightgray;
+}
+
+tr:nth-child(odd) {
+    background-color: darkgray;
+}
