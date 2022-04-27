@@ -9,6 +9,7 @@ const databases = require('./app/database.js')
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js');
 const req = require('express/lib/request');
+const { Session } = require('express-session');
 
 const loadHTML = utilities.loadHtml
 const loadContent = utilities.loadContent
@@ -63,9 +64,17 @@ app.use(authRouter)
 
 app.get("/session", (req, res) => {
   console.log(req.session)
-  if (req.session.passport){
+  try {
+  if (req.session.passport.user.username.length > 0){
+    console.log(req.session.passport)
     res.end(loadHTML("template", "session/submitdata", "placeholder"))
-  } else res.redirect("/login")
+  } else {
+    console.log(req.session.passport)
+    res.redirect("/login")}
+  } catch (e) {
+    // req.session = new Session()
+    res.redirect("login")
+  }
 })
 // // Endpoint for the login page:
 // app.get("/login", (req, res) => {

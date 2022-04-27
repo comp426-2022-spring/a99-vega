@@ -58,7 +58,8 @@ router.post('/login', passport.authenticate('local', {
   failureRedirect: '/login', failureMessage: true
 }));
 
-router.post('/logout', function(req, res, next) {
+router.get('/logout', function(req, res, next) {
+  console.log(req.session.passport)
   req.logout();
   res.redirect('/');
 });
@@ -69,10 +70,10 @@ router.post('/signup', function(req, res, next) {
   var salt = crypto.randomBytes(16);
   crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', function(err, hashedPassword) {
     if (err) { return next(err); }
-    const stmt = db.prepare('INSERT INTO userinfo (username, hashed_password, salt) VALUES (?, ?, ?)')
-    stmt.run(req.body.username, hashedPassword, salt)
-
+    const stmt = db.prepare('INSERT INTO userinfo (username, hashed_password, salt, role) VALUES (?, ?, ?, ?)')
+    stmt.run(req.body.username, hashedPassword, salt, "member")
   });
+  res.redirect("/login")
 });
 
 module.exports = router

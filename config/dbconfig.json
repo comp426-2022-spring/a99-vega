@@ -1,7 +1,7 @@
 {
     "databases": [
         {
-            "name": "user_content_test2",
+            "name": "user_content_test3",
             "tables": [
                 {
                     "name": "userinfo",
