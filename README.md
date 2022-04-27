@@ -77,7 +77,7 @@ To send things to the upstream repository
 2. From your own repository's GitHub
     1. Create a pull reuqest to the upstream
 3. From the upstream repository's GitHub
-    1. Merge the pull request
+    1. Merge the pull request 
 
 ## API Endpoints
 
