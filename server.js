@@ -115,7 +115,6 @@ app.get("/session", (req, res) => {
 
 app.post("/submit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
-  // console.log(req.user)
   if (args["test"]){console.log(req.body)}
   vals = req.body
   stmt = db.prepare("INSERT INTO submission (userid, date, zip, overall_score, mask_score, supplies_score, distancing_score) VALUES (?, ?, ?, ?, ?, ?, ?);")
@@ -123,6 +122,17 @@ app.post("/submit", (req, res)=>{
   
   res.redirect("/");
 })
+
+/*app.post("/admin", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  stmt = db.prepare("UPDATE userinfo SET status = ? WHERE _pkid == ?;")
+  stmt.run(vals.status, vals.userid)
+  
+  res.redirect("/");
+})
+*/
 
 
 // // Endpoint for the login page:

@@ -1,1 +1,20 @@
-<p>This is the admin page</p>
+
+        <p><a href="/logout">Log out</a></p>
+
+        <h1>Admin Page</h1>
+
+        <form action="/admin" method="POST">
+            <!-- User ID Entry -->
+            <label for="userid">User ID</label>
+            <input id = "userid" type="text" name="userid" pattern="[0-9]+" placeholder="Enter user ID"><br/>
+            
+            <!-- Status Entry -->
+            <label for="status">Status</label>
+            <select name="status" id="status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select><br>
+            
+            <input type="submit" value="Submit changes">
+        </form>
+        
