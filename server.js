@@ -99,9 +99,9 @@ app.get("/session", (req, res) => {
       // console.log(req.session.passport)
       if (args["test"]) {console.log(user)}
       // req.user = user.__pkid
-      if (user.role == "member"){
+      if (user.role == "member" && user.status == "active"){
         res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", user.__pkid.toString()))
-      } else if (user.role =="admin"){
+      } else if (user.role =="admin" && user.status == "active"){
         res.end(loadHTML("template", "session/admin", "placeholder"))
       }
     } else {
@@ -123,6 +123,7 @@ app.post("/submit", (req, res)=>{
   
   res.redirect("/");
 })
+
 
 // // Endpoint for the login page:
 // app.get("/login", (req, res) => {
