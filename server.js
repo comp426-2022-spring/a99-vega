@@ -123,16 +123,15 @@ app.post("/submit", (req, res)=>{
   res.redirect("/");
 })
 
-/*app.post("/admin", (req, res)=>{
+app.post("/adminsubmit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
   vals = req.body
-  stmt = db.prepare("UPDATE userinfo SET status = ? WHERE _pkid == ?;")
-  stmt.run(vals.status, vals.userid)
+  stmt = db.prepare("UPDATE userinfo SET status = ? WHERE username == ?;")
+  stmt.run(vals.status, vals.username)
   
   res.redirect("/");
 })
-*/
 
 
 // // Endpoint for the login page:
