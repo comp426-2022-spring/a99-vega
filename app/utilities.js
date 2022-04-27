@@ -23,7 +23,7 @@ const fs = require('fs')
  function loadContent (template, body, placeholder){
   // let html = loadFileAsText(`${path}/${template}.html`)
   // let content = loadFileAsText(`${path}/${body}.html`)
-  return template.replace(`<div id="${placeholder}"></div>`, body)
+  return template.replace(`<placeholder id="${placeholder}"></placeholder>`, body)
 }
 
 /**

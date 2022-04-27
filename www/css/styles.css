@@ -2,3 +2,7 @@
 h1 {
     background-color: aquamarine;
 }
+
+.error {
+    color: red;
+}
