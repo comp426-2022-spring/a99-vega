@@ -1,17 +1,37 @@
 
         <p><a href="/logout">Log out</a></p>
-        <form action="/login" method="POST">
-            <label for="address">Address</label>
-            <input id = "address" type="text" name="address"><br/>
-            <label for="city">City</label>
-            <input id = "city" type="text" name="city"><br/>
-            <label for="state">State</label>
-            <input id = "state" type="text" name="state"><br/>
-            <label for="zip">ZIP</label>
-            <input id = "zip" type="text" name="zip"><br/>
-            <label for="score">Score</label>
-            <input id = "score" type="text" name="score"><br/>
 
+        <h1>Submission</h1>
+
+        <form action="/login" method="POST">
+            <!-- COMMENTING OUT, JUST USING ZIP CODE
+            <label for="address">Address</label>
+            <input id = "address" type="text" name="address" placeholder="Enter address"><br/>
+            <label for="city">City</label>
+            <input id = "city" type="text" name="city" placeholder="Enter city"><br/>
+            <label for="state">State</label>
+            <input id = "state" type="text" name="state" placeholder="Enter state"><br/>
+            -->
+
+            <!-- Zip Code Entry -->
+            <label for="zip">Zip Code</label>
+            <input id = "zip" type="text" name="zip" placeholder="Enter your zip code"><br/>
+            
+            <!-- Overall Rating -->
+            <label for="overall_score">How well did this area adhere to COVID protocol?</label><br>
+            <input type="range" min="1" max="100" value="50" class="slider" id="overall_score"><br>
+
+            <!-- Mask Usage Rating -->
+            <label for="mask_score">What proportion of people wore masks?</label><br>
+            <input type="range" min="1" max="100" value="50" class="slider" id="mask_score"><br>
+
+            <!-- Health Supplies Rating -->
+            <label for="supplies_score">How well did this area provide health supplies (cleansing wipes, masks, etc.)?</label><br>
+            <input type="range" min="1" max="100" value="50" class="slider" id="supplies_score"><br>
+
+            <!-- Social Distancing Rating -->
+            <label for="distancing_score">How well did this area social distance?</label><br>
+            <input type="range" min="1" max="100" value="50" class="slider" id="distancing_score"><br>
 
             <input type="submit" value="Submit data">
         </form>
