@@ -77,10 +77,10 @@ app.get("/", (req, res) => {
     <tr>
       <td>${row.zip}</td>
       <td>${row.date}</td>
-      <td>${row.overall_score}</td>
-      <td>${row.mask_score}</td>
-      <td>${row.supplies_score}</td>
-      <td>${row.distancing_score}</td>
+      <td style="text-align:center">${row.overall_score}</td>
+      <td style="text-align:center">${row.mask_score}</td>
+      <td style="text-align:center">${row.supplies_score}</td>
+      <td style="text-align:center">${row.distancing_score}</td>
     </tr>`
   }
   table +=`</table>`
@@ -153,7 +153,7 @@ app.post("/editprofile", (req, res)=>{
     stmt.run(_username, _pkid)
   }
 
-  /*
+  /* NOT ABLE TO HASH HERE...
   _password = vals.new_password
   if (_password !== null) { 
     stmt = db.prepare("UPDATE userinfo SET password = ? WHERE __pkid = ?;")
