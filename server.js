@@ -88,6 +88,11 @@ app.get("/", (req, res) => {
   res.status(200).end(loadContent(loadFileAsText("www/template.html"), table, "placeholder"))
 })
 
+app.get("/profile", (req, res) => {
+  if (args["test"]) {console.log(req.session)}
+
+})
+
 app.use(authRouter)
 
 app.get("/session", (req, res) => {
@@ -100,7 +105,8 @@ app.get("/session", (req, res) => {
       if (args["test"]) {console.log(user)}
       // req.user = user.__pkid
       if (user.role == "member" && user.status == "active"){
-        res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", user.__pkid.toString()))
+        let replace = loadHTML("template", "session/fork", "placeholder").replace("%USERID%", user.__pkid.toString())
+        res.end(replace.replace("%USERID%", user.__pkid.toString()))
       } else if (user.role =="admin" && user.status == "active"){
         res.end(loadHTML("template", "session/admin", "placeholder"))
       }
@@ -111,6 +117,63 @@ app.get("/session", (req, res) => {
     // req.session = new Session()
     res.redirect("login")
   }
+})
+
+app.post("/submitdata", (req, res)=>{
+  if (args["test"]){console.log(req.submitdata)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  try {
+    res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", vals.userid))
+  } catch(e) {
+    res.redirect("login")
+  }
+})
+
+app.post("/profile", (req, res)=>{
+  if (args["test"]){console.log(req.submitdata)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  try {
+    res.end(loadHTML("template", "session/profile", "placeholder").replace("%USERID%", vals.userid))
+  } catch(e) {
+    res.redirect("login")
+  }
+})
+
+app.post("/editprofile", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  _pkid = vals.userid
+
+  _username = vals.new_username
+  if (_username !== "") { 
+    stmt = db.prepare("UPDATE userinfo SET username = ? WHERE __pkid = ?;")
+    stmt.run(_username, _pkid)
+  }
+
+  /*
+  _password = vals.new_password
+  if (_password !== null) { 
+    stmt = db.prepare("UPDATE userinfo SET password = ? WHERE __pkid = ?;")
+    stmt.run(_password, _pkid)
+  }
+  */
+
+  _email = vals.new_email
+  if (_email !== "") { 
+    stmt = db.prepare("UPDATE userinfo SET email = ? WHERE __pkid = ?;")
+    stmt.run(_email, _pkid)
+  }
+
+  _status = vals.new_status
+  if (_status !== "") { 
+    stmt = db.prepare("UPDATE userinfo SET status = ? WHERE __pkid = ?;")
+    stmt.run(_status, _pkid)
+  }
+  
+  res.redirect("/");
 })
 
 app.post("/submit", (req, res)=>{
@@ -133,6 +196,22 @@ app.post("/adminsubmit", (req, res)=>{
   res.redirect("/");
 })
 
+/*
+app.post("/editprofile:pkid", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  stmt = db.prepare("UPDATE userinfo SET username = ?, hashed_password = ?, email = ?, status = ? WHERE __pkid == ?;")
+  let _username = vals.new_username
+  let _password = vals.new_password
+  let _email = vals.new_email
+  let _status = vals.new_status
+  let _pkid = null
+  stmt.run()
+  
+  res.redirect("/");
+})
+*/
 
 // // Endpoint for the login page:
 // app.get("/login", (req, res) => {
