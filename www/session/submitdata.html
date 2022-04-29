@@ -4,22 +4,13 @@
         <h1>Submission</h1>
 
         <form action="/submit" method="POST">
-            <!-- COMMENTING OUT, JUST USING ZIP CODE
-            <label for="address">Address</label>
-            <input id = "address" type="text" name="address" placeholder="Enter address"><br/>
-            <label for="city">City</label>
-            <input id = "city" type="text" name="city" placeholder="Enter city"><br/>
-            <label for="state">State</label>
-            <input id = "state" type="text" name="state" placeholder="Enter state"><br/>
-            -->
-
-            <!-- Zip Code Entry -->
             <input type="text" value="%USERID%" name="userid" readonly hidden>
 
+            <!-- Zip Code Entry -->
             <label for="zip">Zip Code</label>
             <input id = "zip" type="text" name="zip" inputmode="numeric" minlength="5" maxlength="5" pattern="[0-9]{5}" placeholder="Enter your zip code"><br/>
             
-            <!-- Zip Code Entry -->
+            <!-- Date Entry -->
             <label for="date">Date</label>
             <input id = "date" type="date" name="date" placeholder="Enter the date"><br/>
 

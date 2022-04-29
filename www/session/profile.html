@@ -1,0 +1,32 @@
+
+        <p><a href="/logout">Log out</a></p>
+
+        <h1>Edit Profile Page</h1>
+
+        <form action="/editprofile" method="POST">
+            <input type="text" value="%USERID%" name="userid" readonly hidden>
+
+            <!-- Username Change -->
+            <label for="new_username">Enter new username:</label>
+            <input id = "new_username" type="text" name="new_username" placeholder="Enter new username"><br/>
+            
+            <!-- Password Change 
+            <label for="new_password">Enter new password:</label>
+            <input id = "new_password" type="text" name="new_password" placeholder="Enter new password"><br/>
+            -->
+
+            <!-- Email Change -->
+            <label for="new_email">Enter new email:</label>
+            <input id = "new_email" type="email" name="new_email" placeholder="Enter new email"><br/>
+
+            <!-- Delete Account -->
+            <label for="new_status">Would you like to remove your account?</label><br>
+            <select id="new_status" name="new_status">
+                <option value="active">No</option>
+                <option value="inactive">Yes</option>
+            </select>
+            <br/>
+
+            <input type="submit" value="Submit Changes">
+        </form>
+        
