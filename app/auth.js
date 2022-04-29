@@ -15,6 +15,19 @@ const router = express.Router()
 router.get("/login", (req, res) => {
   if (args["test"]){console.log(req.session)}
   let content = loadHTML("template", "loginform", "placeholder")
+  // if (req.session.messages){
+  //   const messages = req.session.messages
+  //   // console.log(messages)
+  //   content = loadContent(content, `<p class="error">${messages[messages.length - 1]}<p>`, "message")
+  //   // console.log(content)
+  //   // content = loadContent(content, messages[messages.length - 1], "message")
+  // }
+  res.status(200).end(content)
+})
+
+router.get("/login/error", (req, res) => {
+  if (args["test"]){console.log(req.session)}
+  let content = loadHTML("template", "loginform", "placeholder")
   if (req.session.messages){
     const messages = req.session.messages
     // console.log(messages)
@@ -38,13 +51,16 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
     // db.get('SELECT * FROM userinfo WHERE username = ?', [ username ], function(err, row) {
       //   if (err) { return cb(err); }
       //   if (!row) { return cb(null, false, { message: 'Incorrect username or password.' }); }
-      
+
     crypto.pbkdf2(password, row.salt, 310000, 32, 'sha256', function(err, hashedPassword) {
       if (err) { return cb(err); }
       if (!crypto.timingSafeEqual(row.hashed_password, hashedPassword)) {
         return cb(null, false, { message: 'Incorrect username or password.' });
       }
       // console.log("success")
+      if (row.status != "active"){
+        return cb(null, false, {message: 'User is disabled'})
+      }
       return cb(null, row);
       //   });
       });
@@ -56,7 +72,7 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
 
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/session',
-  failureRedirect: '/login', failureMessage: true
+  failureRedirect: '/login/error', failureMessage: true
 }));
 
 router.get('/logout', function(req, res, next) {

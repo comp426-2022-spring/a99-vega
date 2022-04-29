@@ -104,18 +104,20 @@ app.get("/session", (req, res) => {
       // console.log(req.session.passport)
       if (args["test"]) {console.log(user)}
       // req.user = user.__pkid
-      if (user.role == "member" && user.status == "active"){
+      if (user.role == "member"){
         let replace = loadHTML("template", "session/fork", "placeholder").replace("%USERID%", user.__pkid.toString())
         res.end(replace.replace("%USERID%", user.__pkid.toString()))
-      } else if (user.role =="admin" && user.status == "active"){
+      } else if (user.role =="admin"){
         res.end(loadHTML("template", "session/admin", "placeholder"))
+      } else {
+        res.redirect("/login")
       }
     } else {
       if (args["test"]){console.log(req.session.passport)}
       res.redirect("/login")}
   } catch (e) {
     // req.session = new Session()
-    res.redirect("login")
+    res.redirect("/login")
   }
 })
 
