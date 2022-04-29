@@ -198,28 +198,6 @@ app.post("/adminsubmit", (req, res)=>{
   res.redirect("/");
 })
 
-/*
-app.post("/editprofile:pkid", (req, res)=>{
-  if (args["test"]){console.log(req.session)}
-  if (args["test"]){console.log(req.body)}
-  vals = req.body
-  stmt = db.prepare("UPDATE userinfo SET username = ?, hashed_password = ?, email = ?, status = ? WHERE __pkid == ?;")
-  let _username = vals.new_username
-  let _password = vals.new_password
-  let _email = vals.new_email
-  let _status = vals.new_status
-  let _pkid = null
-  stmt.run()
-  
-  res.redirect("/");
-})
-*/
-
-// // Endpoint for the login page:
-// app.get("/login", (req, res) => {
-//   res.status(200).end(loadHTML("template", "loginform", "placeholder"))
-// })
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
