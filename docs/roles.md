@@ -12,5 +12,5 @@ Workflow lead
 
 ## Andrew Buchanan
 API & documentation manager
-Front-end data vizualization lead
+Front-end data vizualization
 Video documentation
