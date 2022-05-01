@@ -64,8 +64,12 @@ app.get("/data", (req, res) => {
   res.json(data)
 })
 
+app.get("/", (req, res)=>{
+  res.redirect("/app")
+})
+
 // Endpoint for the main page - this is a test page right now
-app.get("/", (req, res) => {
+app.get("/app", (req, res) => {
   let data = db.prepare("SELECT * FROM submission").all()
   if (args["test"]) {console.log(data)}
   let table = `
