@@ -4,7 +4,7 @@
 
 Have you planned a trip during the pandemic and wondered, "Are people in [some city] taking this pandemic seriously?" Look no further than this web app.
 
-This project was designed and engineered by Elad Ohana, Peter Jackson, and Andrew Buchanan. The Covid Compliance Tracker enables easy logging, fetching, and crowdsourcing of Covid-19 social compliance behavior. CCT aims to allow easy reporting and exploration of data surrounding mask usage, vaccination status, social distancing, etc. Beta release 0.0.1 is just the scaffolding of this project. While front-end GUI is one key pillar of this project-–so everyday travelers can use this platform––we also aim to support COVID research by providing an easy-to-access API to fetch the raw data. 
+This project was designed and engineered by Elad Ohana, Peter Jackson, and Andrew Buchanan. The Covid Compliance Tracker enables easy logging, fetching, and crowdsourcing of Covid-19 social compliance behavior. CCT aims to allow easy reporting and exploration of data surrounding mask usage, vaccination status, social distancing, etc. Early release 1.0.0 is just the scaffolding of this project. While front-end GUI is one key pillar of this project-–so everyday travelers can use this platform––we also aim to support COVID researchers by providing an easy-to-use API to fetch the raw data. 
 
 
 ### Team Vega Workflow Instructions
