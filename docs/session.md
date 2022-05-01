@@ -200,9 +200,36 @@ Content-Length: 2229
 ```
 
 ### /adminsubmit POST
-Allows administrators to activate or deactivate other users. TODO: require cookie verification to get into this endpoint. 
+Allows administrators to activate or deactivate other users. Requires active session. 
 
 #### Request cURL
 ```
-curl -v -X POST -H 'Content-Type: application/json' -d '{"status":"[active/inactive]", "username":"[username]"}' http://localhost:5000/adminsubmit
+curl -v --cookies -X POST -H 'Content-Type: application/json' -d '{"status":"[active/inactive]", "username":"[username]","role":"[member/admin]"}' http://localhost:5000/adminsubmit
+```
+#### Response
+Either redirects to /admin/error or /admin/success depending on whether or not the username entered exists in the database.
+
+### /admin/error GET
+
+#### Requst cURL
+```
+curl -v --cookies [cookiefile] http://localhost:5000/admin/error
+```
+#### Response body
+```
+```
+#### Response headers
+```
+```
+
+### /admin/success GET
+
+#### Request cURL
+```
+```
+#### Response body
+```
+```
+#### Response headers
+```
 ```
