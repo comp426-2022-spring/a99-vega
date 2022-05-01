@@ -14,9 +14,19 @@ For contributing to this project, please fork the repository and issue a pull re
 ### Issues:
 Please open an issue to track bugs and bug fixes. 
 
+### Running Covid Compliance Tracker
+1. Clone the repository
+```
+git clone https://github.com/comp426-2022-spring/a99-vega
+```
+2. Open the project in VSCode with npm installed and run the commands
+```
+npm install; npm start
+```
+
 ## API Endpoints
 
-### / GET (endpoint for the main page)
+### /app GET (endpoint for the main page)
 #### Request cURL
 
 ```
@@ -96,7 +106,24 @@ curl http://localhost:5000/session
 ### /submitdata POST
 See /docs/sessions for usage of this API. This endpoint is only available for valid sessions (logged-in users).
 
-### /data GET (not yet implemented)
-This API endpoing will allow people to fetch the COVID data as a json object. 
-
-
+### /data GET
+API endpoing allows people to fetch the entire COVID database as a json object. 
+#### Request cURL
+```
+curl http://localhost:5000/data
+```
+#### Response body
+```
+[{"__pkid":1,"userid":2,"date":"27713","zip":"2022-04-26","overall_score":50,"mask_score":50,"supplies_score":50,"distancing_score":50}]
+```
+#### Response headers
+```
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 2467
+ETag: W/"9a3-Va1cM74BM0lJ2nFuAaJ/doMoxKI"
+Date: Sun, 01 May 2022 14:48:24 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+```
