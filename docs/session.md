@@ -1,3 +1,6 @@
+# Session endpoints
+All APIs documented in this page require a valid session. Save the cookies after accessing /login API to use the other APIs on this page.
+
 ### /session GET (main page for established users)
 CCT uses express sessions to validate login credentials. Users are redirected to the login page if they simply try to access the /session endpoint. 
 
@@ -61,11 +64,11 @@ Content-Length: 996
 ```
 
 ### /submitdata POST
-This endpoint displays a form where users can fill out compliance data. 
+This endpoint displays a form where users can fill out compliance data. You must have a valid session cookie to access this endpoint. 
 
 #### Request cURL
 ```
-curl -v -X POST http://localhost:5000/submitdata
+curl -vL --cookie [sessioncookie] -X POST http://localhost:5000/submitdata
 ```
 
 #### Response body
@@ -130,11 +133,11 @@ Content-Length: 2237
 ```
 
 ### /submit POST
-API for posting compliance data to the database
+API for posting compliance data to the database. An active session is required to access this endpoint. First cURL into the /sessions endpoint, save the cookies, and then use the cookies to access this endpoint.
 
 #### Request cURL
 ```
-curl -v -X POST -H 'Content-Type: application/json' -d '{"userid":"[username]","zip":"[zip]","date":"[date]","overall_score":"[score]","mask_score":"[score]","supplies_score":"[score]","distancing_score":"[score]"}' http://localhost:5000/submitdata
+curl -vL --cookie [cookiefile] -X POST -H 'Content-Type: application/json' -d '{"userid":"[username]","zip":"[zip]","date":"[date]","overall_score":"[score]","mask_score":"[score]","supplies_score":"[score]","distancing_score":"[score]"}' http://localhost:5000/submit
 ```
 #### Response body
 ```
@@ -203,5 +206,3 @@ Allows administrators to activate or deactivate other users. TODO: require cooki
 ```
 curl -v -X POST -H 'Content-Type: application/json' -d '{"status":"[active/inactive]", "username":"[username]"}' http://localhost:5000/adminsubmit
 ```
-
-curl -v -X POST -H 'Content-Type: application/json' -d '{"status":"active", "username":"a"}' http://localhost:5000/adminsubmit
