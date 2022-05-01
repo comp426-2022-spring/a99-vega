@@ -134,7 +134,7 @@ API for posting compliance data to the database
 
 #### Request cURL
 ```
-curl -v -X POST -H 'Content-Type: application/json' -d '{"userid":"a","zip":"90277","date":"01-01-2022","overall_score":"30","mask_score":"30","supplies_score":"20","distancing_score":"50"}' http://localhost:5000/submitdata
+curl -v -X POST -H 'Content-Type: application/json' -d '{"userid":"[username]","zip":"[zip]","date":"[date]","overall_score":"[score]","mask_score":"[score]","supplies_score":"[score]","distancing_score":"[score]"}' http://localhost:5000/submitdata
 ```
 #### Response body
 ```
@@ -195,3 +195,13 @@ Connection: keep-alive
 Keep-Alive: timeout=5
 Content-Length: 2229
 ```
+
+### /adminsubmit POST
+Allows administrators to activate or deactivate other users. TODO: require cookie verification to get into this endpoint. 
+
+#### Request cURL
+```
+curl -v -X POST -H 'Content-Type: application/json' -d '{"status":"[active/inactive]", "username":"[username]"}' http://localhost:5000/adminsubmit
+```
+
+curl -v -X POST -H 'Content-Type: application/json' -d '{"status":"active", "username":"a"}' http://localhost:5000/adminsubmit
