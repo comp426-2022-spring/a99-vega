@@ -8,6 +8,7 @@ var SQLiteStore = require('connect-sqlite3')(session);
 const db = require('./app/database.js')[0]
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js');
+
 // const req = require('express/lib/request');
 const { Session } = require('express-session');
 
@@ -88,6 +89,7 @@ app.get("/", (req, res) => {
   res.status(200).end(loadContent(loadFileAsText("www/template.html"), table, "placeholder"))
 })
 
+
 app.get("/profile", (req, res) => {
   if (args["test"]) {console.log(req.session)}
 
@@ -98,10 +100,10 @@ app.use(authRouter)
 app.get("/session", (req, res) => {
   if (args["test"]) {console.log(req.session)}
   try {
-    if (req.session.passport.user.username.length > 0){
+    if (req.session.passport.user.username.length) {
       stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
       user = stmt.get(req.session.passport.user.username)
-      // console.log(req.session.passport)
+      //console.log(req.session.passport)
       if (args["test"]) {console.log(user)}
       // req.user = user.__pkid
       if (user.role == "member"){
@@ -126,9 +128,11 @@ app.post("/submitdata", (req, res)=>{
   if (args["test"]){console.log(req.body)}
   vals = req.body
   try {
-    res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", vals.userid))
+    if (req.session.passport.user.username.length) {
+      res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", vals.userid))
+    }
   } catch(e) {
-    res.redirect("login")
+    res.redirect("/login")
   }
 })
 
@@ -139,7 +143,7 @@ app.post("/profile", (req, res)=>{
   try {
     res.end(loadHTML("template", "session/profile", "placeholder").replace("%USERID%", vals.userid))
   } catch(e) {
-    res.redirect("login")
+    res.redirect("/login")
   }
 })
 
@@ -151,7 +155,7 @@ app.post("/editprofile", (req, res)=>{
 
   _username = vals.new_username
   if (_username !== "") { 
-    stmt = db.prepare("UPDATE userinfo SET username = ? WHERE __pkid = ?;")
+    stmt = db.prepare("UPDATE userinfo SET username = ? WHERE __pkid == ?;")
     stmt.run(_username, _pkid)
   }
 
@@ -165,13 +169,13 @@ app.post("/editprofile", (req, res)=>{
 
   _email = vals.new_email
   if (_email !== "") { 
-    stmt = db.prepare("UPDATE userinfo SET email = ? WHERE __pkid = ?;")
+    stmt = db.prepare("UPDATE userinfo SET email = ? WHERE __pkid == ?;")
     stmt.run(_email, _pkid)
   }
 
   _status = vals.new_status
   if (_status !== "") { 
-    stmt = db.prepare("UPDATE userinfo SET status = ? WHERE __pkid = ?;")
+    stmt = db.prepare("UPDATE userinfo SET status = ? WHERE __pkid == ?;")
     stmt.run(_status, _pkid)
   }
   
@@ -182,22 +186,98 @@ app.post("/submit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
   vals = req.body
-  stmt = db.prepare("INSERT INTO submission (userid, date, zip, overall_score, mask_score, supplies_score, distancing_score) VALUES (?, ?, ?, ?, ?, ?, ?);")
-  stmt.run(vals.userid, vals.zip, vals.date, vals.overall_score, vals.mask_score, vals.supplies_score, vals.distancing_score)
-  
-  res.redirect("/");
+  try {
+    if (req.session.passport.user.username.length) {
+      stmt = db.prepare("INSERT INTO submission (userid, date, zip, overall_score, mask_score, supplies_score, distancing_score) VALUES (?, ?, ?, ?, ?, ?, ?);")
+      stmt.run(vals.userid, vals.zip, vals.date, vals.overall_score, vals.mask_score, vals.supplies_score, vals.distancing_score)
+      res.redirect("/");
+    }
+  } catch(e) {
+    res.redirect("/login")
+  }
 })
 
 app.post("/adminsubmit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
   vals = req.body
-  stmt = db.prepare("UPDATE userinfo SET status = ? WHERE username == ?;")
-  stmt.run(vals.status, vals.username)
+  stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
+  user = stmt.get(req.session.passport.user.username)
+  try{ 
+    if (user.role=="admin") {
+      stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
+      user = stmt.get(vals.username)
+      if(!vals.username) {throw error(e)}
+      stmt = db.prepare("UPDATE userinfo SET status = ?, role = ? WHERE username == ?;")
+      stmt.run(vals.status, vals.role, vals.username)
+      res.redirect('/admin/success')
+    } else {res.redirect('/login')}
+  } catch(e) {
+    res.redirect('/admin/error')
+  }
+})
+
+app.get("/admin/success", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+
+  if (req.session.passport.user.username.length) {
+    stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
+    user = stmt.get(req.session.passport.user.username)
+    try { 
+      if (user.role=="admin") {
+        res.status(200).end(loadContent(loadHTML("template", "session/admin", "placeholder"), "<p id=adminsuccess>Success!</p>", "adminplaceholder"))
+    } else {
+      res.redirect('/login')
+    }
+    } catch(e) {
+    res.redirect('/')
+  }
+  }
+})
+
+app.get("/admin/error", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+
+  if (req.session.passport.user.username.length) {
+    stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
+    user = stmt.get(req.session.passport.user.username)
+    try { 
+      if (user.role=="admin") {
+        res.status(200).end(loadContent(loadHTML("template", "session/admin", "placeholder"), "<p id=adminerror>Error</p>", "adminplaceholder"))
+    } else {
+      res.redirect('/login')
+    }
+    } catch(e) {
+    res.redirect('/')
+  }
+  }
+})
+
+
+/*
+app.post("/editprofile:pkid", (req, res)=>{
+  if (args["test"]){console.log(req.session)}
+  if (args["test"]){console.log(req.body)}
+  vals = req.body
+  stmt = db.prepare("UPDATE userinfo SET username = ?, hashed_password = ?, email = ?, status = ? WHERE __pkid == ?;")
+  let _username = vals.new_username
+  let _password = vals.new_password
+  let _email = vals.new_email
+  let _status = vals.new_status
+  let _pkid = null
+  stmt.run()
   
   res.redirect("/");
 })
+*/
+
+// // Endpoint for the login page:
+// app.get("/login", (req, res) => {
+//   res.status(200).end(loadHTML("template", "loginform", "placeholder"))
+// })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}.`)
 })
