@@ -83,12 +83,14 @@ router.get('/logout', function(req, res, next) {
 
 
 router.post('/signup', function(req, res, next) {
-  // console.log(req.body)
+  console.log(req.body)
   var salt = crypto.randomBytes(16);
   crypto.pbkdf2(req.body.password, salt, 310000, 32, 'sha256', function(err, hashedPassword) {
     if (err) { return next(err); }
     const stmt = db.prepare('INSERT INTO userinfo (username, hashed_password, salt, role, status) VALUES (?, ?, ?, ?, ?)')
     stmt.run(req.body.username, hashedPassword, salt, "member", "active")
+    console.log(req.body.username, hashedPassword, salt)
+
   });
   res.redirect("/login")
 });
