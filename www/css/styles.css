@@ -24,3 +24,11 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background-color: darkgray;
 }
+
+#adminsuccess {
+    color: green
+}
+
+#adminerror {
+    color: red
+}
