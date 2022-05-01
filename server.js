@@ -1,36 +1,38 @@
 const fs = require('fs')
 const express = require('express')
 const morgan = require('morgan')
+const { Session } = require('express-session');
+
 var passport = require('passport');
 var session = require('express-session');
 var SQLiteStore = require('connect-sqlite3')(session);
 
+// Helper modules
 const db = require('./app/database.js')[0]
 const utilities = require('./app/utilities.js')
 const authRouter = require('./app/auth.js');
 
-// const req = require('express/lib/request');
-const { Session } = require('express-session');
-
+// Helper functions
 const loadHTML = utilities.loadHtml
 const loadContent = utilities.loadContent
 const loadFileAsText = utilities.loadFileAsText
 
+// Command line arguments
 const args = require('minimist')(process.argv)
-
-
-const dataPath = 'data'
 const port = args["port"] || 5000
 
+const dataPath = 'data'
 
 const app = express()
 
+// Passport serializer
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
     cb(null, { id: user.id, username: user.username });
   });
 });
 
+// Passport deserializer
 passport.deserializeUser(function(user, cb) {
   process.nextTick(function() {
     return cb(null, user);
@@ -43,7 +45,6 @@ app.use(express.urlencoded({ extended: true }));
 const writeStream = fs.createWriteStream(`./${dataPath}/access.log`, {flags: 'a'})
 app.use(morgan("combined", {stream: writeStream}))
 
-app.use(express.static('/session'));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
@@ -52,10 +53,16 @@ app.use(session({
 }));
 
 app.use(passport.authenticate('session'));
+app.use(express.static('/session'));
 
-
+// Serve files in css
 app.use(express.static("./www/css"))
 
+// API that fetches the entire database and returns it as a json object
+app.get("/data", (req, res) => { 
+  let data = db.prepare("SELECT * FROM submission").all()
+  res.json(data)
+})
 
 // Endpoint for the main page - this is a test page right now
 app.get("/", (req, res) => {
@@ -85,27 +92,20 @@ app.get("/", (req, res) => {
     </tr>`
   }
   table +=`</table>`
-  // res.status(200).end(loadHTML("template", "test", "placeholder"))
   res.status(200).end(loadContent(loadFileAsText("www/template.html"), table, "placeholder"))
 })
 
-
-app.get("/profile", (req, res) => {
-  if (args["test"]) {console.log(req.session)}
-
-})
-
+// Router for all user authentication
 app.use(authRouter)
 
+// Endpoint that validates user's cookies and displays the appropriate page
 app.get("/session", (req, res) => {
   if (args["test"]) {console.log(req.session)}
   try {
     if (req.session.passport.user.username.length) {
       stmt = db.prepare("SELECT * FROM userinfo WHERE username=?")
       user = stmt.get(req.session.passport.user.username)
-      //console.log(req.session.passport)
       if (args["test"]) {console.log(user)}
-      // req.user = user.__pkid
       if (user.role == "member"){
         let replace = loadHTML("template", "session/fork", "placeholder").replace("%USERID%", user.__pkid.toString())
         res.end(replace.replace("%USERID%", user.__pkid.toString()))
@@ -118,16 +118,17 @@ app.get("/session", (req, res) => {
       if (args["test"]){console.log(req.session.passport)}
       res.redirect("/login")}
   } catch (e) {
-    // req.session = new Session()
     res.redirect("/login")
   }
 })
 
+// Add to the database
 app.post("/submitdata", (req, res)=>{
   if (args["test"]){console.log(req.submitdata)}
   if (args["test"]){console.log(req.body)}
   vals = req.body
   try {
+    // Does the user have an activesession?
     if (req.session.passport.user.username.length) {
       res.end(loadHTML("template", "session/submitdata", "placeholder").replace("%USERID%", vals.userid))
     }
@@ -136,6 +137,7 @@ app.post("/submitdata", (req, res)=>{
   }
 })
 
+//Update the user's profile setting
 app.post("/profile", (req, res)=>{
   if (args["test"]){console.log(req.submitdata)}
   if (args["test"]){console.log(req.body)}
@@ -147,25 +149,18 @@ app.post("/profile", (req, res)=>{
   }
 })
 
+// Changes the user's info in database
 app.post("/editprofile", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
   vals = req.body
   _pkid = vals.userid
-
   _username = vals.new_username
+
   if (_username !== "") { 
     stmt = db.prepare("UPDATE userinfo SET username = ? WHERE __pkid == ?;")
     stmt.run(_username, _pkid)
   }
-
-  /* NOT ABLE TO HASH HERE...
-  _password = vals.new_password
-  if (_password !== null) { 
-    stmt = db.prepare("UPDATE userinfo SET password = ? WHERE __pkid = ?;")
-    stmt.run(_password, _pkid)
-  }
-  */
 
   _email = vals.new_email
   if (_email !== "") { 
@@ -182,6 +177,7 @@ app.post("/editprofile", (req, res)=>{
   res.redirect("/");
 })
 
+// Enters submissions into the database
 app.post("/submit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
@@ -197,6 +193,7 @@ app.post("/submit", (req, res)=>{
   }
 })
 
+// Allows administrators to edit the other user access
 app.post("/adminsubmit", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
@@ -217,6 +214,7 @@ app.post("/adminsubmit", (req, res)=>{
   }
 })
 
+// Administrators successfully changed user priviledge
 app.get("/admin/success", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
@@ -236,6 +234,7 @@ app.get("/admin/success", (req, res)=>{
   }
 })
 
+// Something went wrong when administrator tried to update a user's info
 app.get("/admin/error", (req, res)=>{
   if (args["test"]){console.log(req.session)}
   if (args["test"]){console.log(req.body)}
@@ -255,29 +254,7 @@ app.get("/admin/error", (req, res)=>{
   }
 })
 
-
-/*
-app.post("/editprofile:pkid", (req, res)=>{
-  if (args["test"]){console.log(req.session)}
-  if (args["test"]){console.log(req.body)}
-  vals = req.body
-  stmt = db.prepare("UPDATE userinfo SET username = ?, hashed_password = ?, email = ?, status = ? WHERE __pkid == ?;")
-  let _username = vals.new_username
-  let _password = vals.new_password
-  let _email = vals.new_email
-  let _status = vals.new_status
-  let _pkid = null
-  stmt.run()
-  
-  res.redirect("/");
-})
-*/
-
-// // Endpoint for the login page:
-// app.get("/login", (req, res) => {
-//   res.status(200).end(loadHTML("template", "loginform", "placeholder"))
-// })
-
+// Run the app
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}.`)
 })
